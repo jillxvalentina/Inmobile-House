@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es-PE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inmobile-House | Publicación de terrenos rurales</title>
+<meta name="description" content="Publica y busca terrenos rurales en el Perú. Los datos se mantienen solo en tu navegador mientras la página está abierta.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231F3D2B'/%3E%3Cpath d='M8 18.5 16 11l8 7.5V24H8z' fill='none' stroke='%23C9A227' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --verde:#1F3D2B;
+    --verde-claro:#2F5840;
+    --bronce:#A5822F;
+    --fondo:#F6F6F2;
+    --panel:#FFFFFF;
+    --texto:#181C19;
+    --suave:#6B7269;
+    --borde:#E1E3DC;
+    --alerta:#8E2436;
+    --sans:"Inter",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    --serif:"Source Serif 4",Georgia,serif;
+    --radio:8px;
+    --sombra:0 1px 2px rgba(24,28,25,.05), 0 6px 18px rgba(24,28,25,.05);
+  }
+  *,*::before,*::after{box-sizing:border-box;min-width:0}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--fondo);color:var(--texto);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  img{max-width:100%;display:block}
+  h1,h2,h3{font-family:var(--serif);margin:0;line-height:1.2;letter-spacing:-.01em}
+  button,input,textarea{font:inherit;color:inherit}
+  :focus-visible{outline:2px solid var(--verde);outline-offset:2px}
+  .env{width:min(1160px,100%);margin:0 auto;padding:0 24px}
+
+  /* Barra superior */
+  .barra{background:var(--panel);border-bottom:1px solid var(--borde);position:sticky;top:0;z-index:5}
+  .barra .env{display:flex;align-items:center;justify-content:space-between;gap:16px;height:60px}
+  .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--texto)}
+  .logo .marca{width:30px;height:30px;border-radius:7px;background:var(--verde);display:grid;place-items:center;flex:none}
+  .logo .marca svg{width:17px;height:17px}
+  .logo b{font-family:var(--serif);font-size:17px;font-weight:700;letter-spacing:-.015em}
+  .logo span{display:block;font-size:11px;color:var(--suave);letter-spacing:.06em;text-transform:uppercase;line-height:1.2}
+  .contador{font-size:13px;color:var(--suave);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .contador b{color:var(--texto);font-weight:600}
+
+  /* Encabezado */
+  .encabezado{background:var(--verde);color:#EAEFE9;padding:40px 0 36px;border-bottom:3px solid var(--bronce)}
+  .encabezado h1{font-size:clamp(24px,3.2vw,32px);color:#fff;max-width:18ch}
+  .encabezado p{margin:10px 0 0;max-width:62ch;color:#C4CFC3;font-size:15px}
+
+  /* Cuerpo */
+  .cuerpo{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:24px;align-items:start;padding:28px 24px 64px;width:min(1160px,100%);margin:0 auto}
+  .panel{background:var(--panel);border:1px solid var(--borde);border-radius:var(--radio);box-shadow:var(--sombra)}
+  .panel > header{padding:16px 20px;border-bottom:1px solid var(--borde)}
+  .panel > header h2{font-size:16px;font-weight:700}
+  .panel > header p{margin:2px 0 0;font-size:13px;color:var(--suave)}
+
+  form{padding:20px;display:grid;gap:14px}
+  .campo{display:grid;gap:6px}
+  .campo > span{font-size:12px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--suave)}
+  input[type=text],input[type=search],textarea{width:100%;padding:9px 12px;border:1px solid #CDD2C8;border-radius:6px;background:#fff;font-size:14px;transition:border-color .12s,box-shadow .12s}
+  input[type=text]:focus,input[type=search]:focus,textarea:focus{outline:0;border-color:var(--verde);box-shadow:0 0 0 3px rgba(31,61,43,.12)}
+  textarea{min-height:72px;resize:vertical}
+  ::placeholder{color:#A3AA9D}
+
+  .archivo{position:relative;display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px dashed #C2C8BC;border-radius:6px;background:#FAFBF8;cursor:pointer}
+  .archivo:hover{border-color:var(--verde);background:#F4F7F1}
+  .archivo input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+  .archivo svg{width:18px;height:18px;flex:none;color:var(--suave)}
+  .archivo .texto{font-size:13px;color:var(--suave);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .previa{display:none;position:relative;border-radius:6px;overflow:hidden;aspect-ratio:3/2;background:#EDEFE9;border:1px solid var(--borde)}
+  .previa img{width:100%;height:100%;object-fit:cover}
+  .previa button{position:absolute;top:6px;right:6px;width:26px;height:26px;border:0;border-radius:50%;background:rgba(24,28,25,.72);color:#fff;font-size:15px;line-height:1;cursor:pointer}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:6px;border:1px solid transparent;background:var(--verde);color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:background .12s}
+  .btn:hover{background:var(--verde-claro)}
+  .btn.texto{background:none;color:var(--alerta);border:0;padding:0;font-size:13px}
+  .btn.texto:hover{background:none;text-decoration:underline}
+  .error{margin:0;min-height:17px;font-size:13px;color:var(--alerta)}
+  .nota{margin:0;padding:0 20px 18px;font-size:12px;color:var(--suave)}
+
+  /* Listado */
+  .cabecera-lista{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:16px}
+  .cabecera-lista h2{font-size:19px;margin-right:auto}
+  .buscador{position:relative;flex:1 1 260px;max-width:340px}
+  .buscador svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--suave);pointer-events:none}
+  .buscador input{padding-left:33px}
+
+  .grilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:18px}
+  .tarjeta{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--borde);border-radius:var(--radio);overflow:hidden;box-shadow:var(--sombra);transition:box-shadow .15s,transform .15s}
+  .tarjeta:hover{box-shadow:0 2px 4px rgba(24,28,25,.06),0 12px 28px rgba(24,28,25,.09);transform:translateY(-1px)}
+  .tarjeta .foto{aspect-ratio:3/2;background:#E9ECE5;position:relative}
+  .tarjeta .foto img{width:100%;height:100%;object-fit:cover}
+  .tarjeta .cuerpo-tarjeta{padding:14px 16px 12px;display:flex;flex-direction:column;gap:5px;flex:1}
+  .tarjeta h3{font-family:var(--sans);font-size:15px;font-weight:600;letter-spacing:0}
+  .direccion{margin:0;display:flex;align-items:flex-start;gap:5px;font-size:13px;color:var(--suave)}
+  .direccion svg{width:13px;height:13px;flex:none;margin-top:3px}
+  .detalle{margin:4px 0 0;font-size:13px;color:#454B45}
+  .pie-tarjeta{margin-top:auto;padding-top:12px;display:flex;justify-content:flex-end}
+  .vacio{grid-column:1/-1;padding:44px 20px;text-align:center;border:1px dashed #C6CCC0;border-radius:var(--radio);background:#FBFBF8;color:var(--suave);font-size:14px}
+
+  footer{border-top:1px solid var(--borde);background:var(--panel)}
+  footer .env{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding-top:18px;padding-bottom:18px;font-size:12.5px;color:var(--suave)}
+
+  @media (min-width:901px){ .columna-form{position:sticky;top:84px} }
+  @media (max-width:900px){
+    .cuerpo{grid-template-columns:1fr;gap:20px;padding:20px 20px 48px}
+    .env{padding:0 20px}
+    .encabezado{padding:30px 0 28px}
+  }
+  @media (max-width:560px){
+    body{font-size:14.5px}
+    .env{padding:0 16px}
+    .cuerpo{padding:16px 16px 40px}
+    .logo span{display:none}
+    .grilla{grid-template-columns:1fr;gap:14px}
+    .cabecera-lista h2{width:100%;margin-right:0}
+    .buscador{max-width:none}
+    form{padding:16px}
+    .btn{width:100%}
+  }
+</style>
+</head>
+<body>
+
+<header class="barra">
+  <div class="env">
+    <a class="logo" href="./">
+      <span class="marca"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A227" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7v9H3z"/></svg></span>
+      <span><b>Inmobile-House</b><span>Terrenos rurales</span></span>
+    </a>
+    <p class="contador" id="contador"></p>
+  </div>
+</header>
+
+<section class="encabezado">
+  <div class="env">
+    <h1>Publicación de terrenos rurales</h1>
+    <p>Registra un terreno con su nombre, dirección y fotografía. La información se mantiene únicamente en este navegador mientras la página esté abierta; al recargarla, el listado vuelve a su estado inicial.</p>
+  </div>
+</section>
+
+<div class="cuerpo">
+  <div class="columna-form">
+    <section class="panel">
+      <header>
+        <h2>Registrar terreno</h2>
+        <p>Los campos con datos básicos son obligatorios.</p>
+      </header>
+      <form id="form" novalidate>
+        <label class="campo"><span>Nombre del terreno</span><input type="text" name="nombre" placeholder="Chacra con viñedo" autocomplete="off"></label>
+        <label class="campo"><span>Dirección</span><input type="text" name="direccion" placeholder="Lunahuaná, Cañete, Lima" autocomplete="off"></label>
+        <div class="campo">
+          <span>Fotografía</span>
+          <label class="archivo" id="zona-archivo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4m0 0L8 8m4-4 4 4"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+            <span class="texto" id="texto-archivo">Seleccionar una imagen (opcional)</span>
+            <input type="file" name="imagen" accept="image/*" aria-label="Fotografía del terreno">
+          </label>
+          <div class="previa" id="previa">
+            <img id="previa-img" alt="Vista previa de la fotografía">
+            <button type="button" id="quitar-previa" aria-label="Quitar la imagen">×</button>
+          </div>
+        </div>
+        <label class="campo"><span>Descripción <span style="text-transform:none;letter-spacing:0;font-weight:400">(opcional)</span></span><textarea name="detalle" placeholder="1.2 ha con riego por canal"></textarea></label>
+        <p class="error" id="error" role="alert"></p>
+        <button class="btn" type="submit">Publicar terreno</button>
+      </form>
+      <p class="nota">No se envía información a internet ni se almacena en una base de datos.</p>
+    </section>
+  </div>
+
+  <main>
+    <div class="cabecera-lista">
+      <h2>Terrenos publicados</h2>
+      <div class="buscador">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="buscar" placeholder="Buscar por nombre o dirección" aria-label="Buscar terrenos">
+      </div>
+    </div>
+    <div class="grilla" id="grilla" aria-live="polite"></div>
+  </main>
+</div>
+
+<footer>
+  <div class="env">
+    <span>Inmobile-House · Terrenos rurales del Perú</span>
+    <span>© <span id="anio"></span> · Datos temporales en el navegador</span>
+  </div>
+</footer>
+
+<script>
+  const $ = s => document.querySelector(s);
+
+  window.SIN_FOTO = "data:image/svg+xml;utf8," + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+      <rect width="300" height="200" fill="#E9ECE5"/>
+      <path d="M0 150 C70 132 150 158 300 138 V200 H0Z" fill="#DCE1D6"/>
+      <path d="M0 170 C90 156 180 178 300 162 V200 H0Z" fill="#CFD6C8"/>
+      <g fill="none" stroke="#9BA694" stroke-width="2.2" stroke-linejoin="round">
+        <path d="M128 104 150 86l22 18v22h-44z"/>
+      </g>
+    </svg>`);
+
+  // Los terrenos viven solo en esta variable, en memoria del navegador.
+  // Las fotos fijas van en la carpeta "img", al lado de index.html.
+  let terrenos = [
+    {id:1, nombre:"Chacra con viñedo", direccion:"Lunahuaná, Cañete, Lima", detalle:"1.2 ha con riego por canal.", img:"img/terreno-1.jpg"},
+    {id:2, nombre:"Andenes con vista al valle", direccion:"Urubamba, Cusco", detalle:"0.8 ha con riego por gravedad.", img:"img/terreno-2.jpg"},
+    {id:3, nombre:"Finca cafetalera", direccion:"Villa Rica, Oxapampa, Pasco", detalle:"10 ha con quebrada dentro del predio.", img:"img/terreno-3.jpg"}
+  ];
+  let siguienteId = 4, busqueda = "";
+
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>';
+
+  function pintar(){
+    const q = busqueda.trim().toLowerCase();
+    const lista = terrenos.filter(t => !q || t.nombre.toLowerCase().includes(q) || t.direccion.toLowerCase().includes(q));
+
+    $("#contador").innerHTML = `<b>${terrenos.length}</b> ${terrenos.length === 1 ? "terreno publicado" : "terrenos publicados"}`;
+
+    if(!lista.length){
+      $("#grilla").innerHTML = `<p class="vacio">${terrenos.length ? "Ningún terreno coincide con la búsqueda." : "Aún no hay terrenos publicados. Registra el primero con el formulario."}</p>`;
+      return;
+    }
+    $("#grilla").innerHTML = lista.map(t => `
+      <article class="tarjeta">
+        <div class="foto"><img src="${t.img}" alt="Fotografía de ${esc(t.nombre)}" loading="lazy" onerror="this.onerror=null;this.src=SIN_FOTO"></div>
+        <div class="cuerpo-tarjeta">
+          <h3>${esc(t.nombre)}</h3>
+          <p class="direccion">${PIN}<span>${esc(t.direccion)}</span></p>
+          ${t.detalle ? `<p class="detalle">${esc(t.detalle)}</p>` : ""}
+          <div class="pie-tarjeta"><button class="btn texto" data-quitar="${t.id}">Quitar</button></div>
+        </div>
+      </article>`).join("");
+  }
+
+  const form = $("#form");
+  const inputImagen = form.imagen;
+
+  function limpiarImagen(){
+    inputImagen.value = "";
+    $("#previa").style.display = "none";
+    $("#previa-img").removeAttribute("src");
+    $("#texto-archivo").textContent = "Seleccionar una imagen (opcional)";
+  }
+
+  inputImagen.addEventListener("change", () => {
+    const archivo = inputImagen.files[0];
+    if(!archivo) return limpiarImagen();
+    $("#previa-img").src = URL.createObjectURL(archivo);
+    $("#previa").style.display = "block";
+    $("#texto-archivo").textContent = archivo.name;
+  });
+  $("#quitar-previa").addEventListener("click", limpiarImagen);
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    if(!form.nombre.value.trim() || !form.direccion.value.trim()){
+      $("#error").textContent = "Ingresa el nombre y la dirección del terreno.";
+      return;
+    }
+    $("#error").textContent = "";
+    const archivo = inputImagen.files[0];
+    terrenos.unshift({
+      id: siguienteId++,
+      nombre: form.nombre.value.trim(),
+      direccion: form.direccion.value.trim(),
+      detalle: form.detalle.value.trim(),
+      img: archivo ? URL.createObjectURL(archivo) : SIN_FOTO
+    });
+    form.reset();
+    limpiarImagen();
+    pintar();
+  });
+
+  $("#buscar").addEventListener("input", e => { busqueda = e.target.value; pintar(); });
+
+  $("#grilla").addEventListener("click", e => {
+    const b = e.target.closest("[data-quitar]");
+    if(!b) return;
+    terrenos = terrenos.filter(t => t.id !== +b.dataset.quitar);
+    pintar();
+  });
+
+  $("#anio").textContent = new Date().getFullYear();
+  pintar();
+</script>
+</body>
+</html>
